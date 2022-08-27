@@ -86,7 +86,7 @@ const verifyUser = async (accessToken, refreshToken, profile, verified) => {
   }
 
   try {
-    
+
     const user = await UserService.signIn({
       googleId: profile.id,
       email: profile.email,
@@ -123,7 +123,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   let err;
-  
+
   try {
     const user = UserService.findUsingId(id);
     done(null, user);
@@ -145,13 +145,15 @@ app.get('/api', (req, res) => {
   res.send('/api GET request')
 })
 
-app.get('/profile', (req, res) => {
-    // Cookies that have not been signed
-    console.log('Cookies: ', req.cookies)
+app.get('/profile', async (req, res) => {
+  // Cookies that have not been signed
+  console.log('Cookies: ', req.cookies)
 
-    // Cookies that have been signed
-    console.log('Signed Cookies: ', req.signedCookies)
-  res.send('/profile GET request')
+  // Cookies that have been signed
+  console.log('Signed Cookies: ', req.signedCookies);
+
+  // Who is this user?
+  res.send('/profile GET request: user | ' + await req.user );
 })
 
 app.listen(PORT, () => {
