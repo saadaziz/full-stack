@@ -34,6 +34,7 @@ const createUser = (User) => async (googleId, email, displayName, avatarUrl) => 
 }
 
 const signIn =  (User) => async (argument) => {
+  console.log("signIn " + argument);
   const user = await User.findOne({ googleId: argument.googleId });
   
   console.log("user-service | signIn found user in db: " + user);
@@ -42,9 +43,19 @@ const signIn =  (User) => async (argument) => {
 
 }
 
+const findUsingId = (User) => async (argument) => {
+  console.log("findUsingId " + argument)
+  const user = await User.findOne({ id: argument });
+  
+  console.log("user-service | findUsingId found user in db: " + user);
+
+  return user;
+}
+
 module.exports = (User) => {
   return {
     createUser: createUser(User),
     signIn: signIn(User),
+    findUsingId: findUsingId(User)
   }
 }

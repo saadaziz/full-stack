@@ -7,7 +7,10 @@ const authRoutes = require('./controller/auth-routes');
 const passport = require('passport');
 const Strategy = require('passport-google-oauth2');
 const UserService = require('./lib/user');
-var session = require('express-session')
+var session = require('express-session');
+const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
+
 
 //TODO
 // consider moving all mongodb stuff out
@@ -20,6 +23,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 const PORT = process.env.PORT || 3001;
 const ROOT_URL = process.env.ROOT_URL;
+const MONGO_URL = process.env.MONGO_DB_URL_TEST;
+const ONE_DAY_MILLISECONDS = 1000 * 60 * 60 * 24;
 
 const app = express();
 
@@ -28,21 +33,28 @@ const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// enable cookie parsing
+app.use(cookieParser());
+
 // enable sessions
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: {
+    secure: process.env.NODE_ENV !== "production" ? false : true,
+    maxAge: ONE_DAY_MILLISECONDS
+  },
+  store: MongoStore.create({
+    mongoUrl: MONGO_URL,
+  })
 }));
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
+  // sess.cookie.secure = true // serve secure cookies
 }
 
 // set up data sources
-const MONGO_URL = process.env.MONGO_DB_URL_TEST;
-
 // conecting to mongoDb atlas | TODO - factor in documentDb connection switching
 mongoose.connect(
   MONGO_URL,
@@ -75,6 +87,7 @@ const verifyUser = async (accessToken, refreshToken, profile, verified) => {
   }
 
   try {
+    
     const user = await UserService.signIn({
       googleId: profile.id,
       email: profile.email,
@@ -110,19 +123,37 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  UserService.findById(id, function (err, user) {
+  let err;
+  
+  try {
+    const user = UserService.findUsingId(id);
+    done(null, user);
+  } catch (err) {
+    console.error("deserializeUser: err | " + err);
     done(err, user);
-  });
+  };
 });
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // set up application routes
 app.use('/', defaultRoutes);
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
+
+app.get('/api', (req, res) => {
+  res.send('/api GET request')
+})
+
+app.get('/profile', (req, res) => {
+    // Cookies that have not been signed
+    console.log('Cookies: ', req.cookies)
+
+    // Cookies that have been signed
+    console.log('Signed Cookies: ', req.signedCookies)
+  res.send('/profile GET request')
+})
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
