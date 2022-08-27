@@ -20,7 +20,7 @@ router.get(
 router.get(
     '/oauth2callback',
     passport.authenticate('google', {
-        failureRedirect: '/login',
+        failureRedirect: '/logout',
         successRedirect: '/profile',
     }),
     (req, res) => {

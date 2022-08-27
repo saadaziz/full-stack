@@ -86,13 +86,13 @@ const verifyUser = async (accessToken, refreshToken, profile, verified) => {
   }
 
   try {
-    
+
     const user = await UserService.signIn({
       googleId: profile.id,
       email: profile.email,
       googleToken: { accessToken, refreshToken },
       displayName: profile.displayName,
-      avatarUrl: profile.avatarUrl
+      avatarUrl: avatarUrl
     });
 
     verified(null, user);
@@ -121,11 +121,10 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  let err;
-  
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = UserService.findUsingId(id);
+    let err;
+    const user = await UserService.findUsingId(id);
     done(null, user);
   } catch (err) {
     console.error("deserializeUser: err | " + err);
@@ -145,14 +144,25 @@ app.get('/api', (req, res) => {
   res.send('/api GET request')
 })
 
-app.get('/profile', (req, res) => {
-    // Cookies that have not been signed
-    console.log('Cookies: ', req.cookies)
+app.get('/profile', async (req, res) => {
+  // Cookies that have not been signed
+  console.log('Cookies: ', req.cookies)
 
-    // Cookies that have been signed
-    console.log('Signed Cookies: ', req.signedCookies)
-  res.send('/profile GET request')
+  // Cookies that have been signed
+  console.log('Signed Cookies: ', req.signedCookies);
+
+  // Who is this user?
+  res.send('/profile GET request: user | ' + await req.user);
 })
+
+app.get('/logout', function (req, res) {
+  res.status(200).clearCookie('connect.sid', {
+    path: '/'
+  });
+  req.session.destroy(function (err) {
+    res.redirect('/');
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

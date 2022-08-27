@@ -27,6 +27,10 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  googleToken: {
+    access_token: String,
+    refresh_token: String,
+  },
   lastVisited: 
   { 
     type: Date, 
