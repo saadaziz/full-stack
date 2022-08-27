@@ -1,7 +1,7 @@
 # SaadAziz
 
 - Hi, my name is Saad Aziz. I am a web developer from Portland, Oregon
-- For the last seven years, I have been working as an engineering leader
+- For the last seven years, I have been working as an engineering leader (As of August 27, 2022)
 - Because I have been focusing on my passion, helping software developers get to the next level, I haven't been able to write as much code
 - Therefore, this is my outlet for code
 
@@ -75,3 +75,28 @@ Features
 #### Controller
 - Serves as a "proxy" for client requests and responses
   - Decouples core business logic from client specific communication
+
+  ### Persistence
+  - Browser
+    - The front-end application will run in the browser, and will be able to employ the following strategies
+      - Session
+      - Cookie
+      - Local storage
+
+#### Persistence | Browser Cookies and Server Session 
+- Using express-session
+  - Scalable server-side session storage, integrated with a mongoDb cluster over-riding the default light-weight MemoryStore  
+- Using cookie-parser
+  - Inspects headers between client/server communications, parses cookies, and writes them into the browser's state, saving the cookie locally for the user
+- Sessions are securely stored
+  - A word on security
+    - Session data SHOULD not be stored in the cookie itself, the cookie should only contain a session identifier, unique to the application domain
+    - Session data will only be stored on the server, securely using mongoDb
+
+## Gifts
+
+- Markdown visualizers are a game changer, check this one out. 
+  - It offers integration with Visual Studio Code, allows you to convert mark down into a "mind map" [Link](https://markmap.js.org/)
+- Did you learn anything new?
+  - My one ask, please pay it forward and help create the future for software development!
+  - If you enjoyed my ramblings, and would like to learn more, please reach out I would be happy to share learning resources with you, for example, my e-book on modern full stack development... [Link](https://www.linkedin.com/in/saadaziz/ "Saad's linkedIn profile, LION - Linked In Open Networker")
