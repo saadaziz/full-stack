@@ -6,6 +6,9 @@
   "directories": {
     "lib": "lib"
   },
+  "engines": {
+    "node": "14.18.1"
+  },
   "scripts": {
     "test": "jest",
     "test-watch": "nodemon --exec \"npm test\"",

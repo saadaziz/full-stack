@@ -19,7 +19,10 @@
 
 ## Architecture
 As is:
-- express api server
+- node http server
+- express app, essentially routes and stacks of middleware
+  - server side session data using express session middleware
+  - client side cookie, correlating to session id access cookie parser middeware
 - jest unit tests for service layer
 
 To be:
@@ -39,18 +42,21 @@ To be:
 Features
 - [x] Run tests in background | start with 'npm run-script test-watch'
 - [x] Run user create tests against in-memory database as a mock for the real thing
-- [ ] API server, running Node, express on a simple web server hosted by Elastic beanstalk, accessible at app.saadaziz.com
+- [x] API server endpoints for User log-in | Client side (Javascript) Application using Oauth 2.0, provider Google API
+- [x] Express session middleware maintains a cookie on the client side with session id, the data is stored on the server side
+- [x] API server, running Node, express on a simple web server hosted by Elastic beanstalk, accessible at app.saadaziz.com
+- [ ] Login page 
+- [ ] Application access control using oAuth2, google API console, and mongoDb for session/user ACL
 - [ ] Error handling
 - [ ] Restful endpoints CRUD (User)
 - [ ] Mongodb and documentDb integration
-- [ ] Access control using oauth2 and passport
+- [ ] Replace MemoryStore component in express-session
 - [ ] Winston logging 
 - [ ] Unit tests
 - [ ] CICD
 
-
 ### Testability
-- In general terms, tests are expensive and we want to minimize pouring concerete around elements of our code that are changing
+- In general terms, tests are expensive and we want to minimize superfluous testing
 - As a general rule of thumb, we will unit test core business logic
   - In other words, we want to perform as few integration and database tests as possible
 - To ensure seperation of concerns, business logic will only live in the "service" layer
