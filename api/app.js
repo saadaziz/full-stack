@@ -7,6 +7,7 @@ const authRoutes = require('./controller/auth-routes');
 const passport = require('passport');
 const Strategy = require('passport-google-oauth2');
 const UserService = require('./lib/user');
+var session = require('express-session')
 
 //TODO
 // consider moving all mongodb stuff out
@@ -26,6 +27,18 @@ const app = express();
 const jsonParser = bodyParser.json();
 app.use(jsonParser);
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// enable sessions
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
 
 // set up data sources
 const MONGO_URL = process.env.MONGO_DB_URL_TEST;
@@ -91,6 +104,20 @@ passport.use(
     verifyUser,
   ),
 );
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  UserService.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // set up application routes
 app.use('/', defaultRoutes);

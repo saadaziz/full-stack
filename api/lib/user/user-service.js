@@ -1,3 +1,5 @@
+const { findById } = require("./user-model");
+
 /**
  * fn | createUser - given the following parameters, create a new user, and, return userId from persistence layer.
  * inputs 
@@ -43,6 +45,6 @@ const signIn =  (User) => async (argument) => {
 module.exports = (User) => {
   return {
     createUser: createUser(User),
-    signIn: signIn(User)
+    signIn: signIn(User),
   }
 }
