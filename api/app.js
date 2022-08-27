@@ -124,11 +124,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     let err;
-    console.log("finding using " + id);
     const user = await UserService.findUsingId(id);
     done(null, user);
-    console.log(user);
-    console.log("finding using " + id);
   } catch (err) {
     console.error("deserializeUser: err | " + err);
     done(err, user);
@@ -159,7 +156,6 @@ app.get('/profile', async (req, res) => {
 })
 
 app.get('/logout', function (req, res) {
-  // req.logOut();
   res.status(200).clearCookie('connect.sid', {
     path: '/'
   });
