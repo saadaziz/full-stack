@@ -24,17 +24,18 @@ As is:
   - server side session data using express session middleware
   - client side cookie, correlating to session id access cookie parser middeware
 - jest unit tests for service layer
+- elastic beanstalk for infrastructure management
+- oAuth 2.0 using google API as identity server
+- user and session management with persistence on mongoDb cluster
 
 To be:
 - Browser
   - React, next, material-ui
-  - Server
-  - Next, mongoDb, mongoose, passport
+- Server
+  - Next
 - Infrastructure
-  - Elastic beanstalk
   - AWS documentDb
 - 3rd party integration
-  - Google OAuth API
   - Stripe API
   - Github API
   - Mailchimp API
