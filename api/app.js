@@ -92,7 +92,7 @@ const verifyUser = async (accessToken, refreshToken, profile, verified) => {
       email: profile.email,
       googleToken: { accessToken, refreshToken },
       displayName: profile.displayName,
-      avatarUrl: profile.avatarUrl
+      avatarUrl: avatarUrl
     });
 
     verified(null, user);
@@ -121,12 +121,14 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  let err;
-
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = UserService.findUsingId(id);
+    let err;
+    console.log("finding using " + id);
+    const user = await UserService.findUsingId(id);
     done(null, user);
+    console.log(user);
+    console.log("finding using " + id);
   } catch (err) {
     console.error("deserializeUser: err | " + err);
     done(err, user);
@@ -153,8 +155,18 @@ app.get('/profile', async (req, res) => {
   console.log('Signed Cookies: ', req.signedCookies);
 
   // Who is this user?
-  res.send('/profile GET request: user | ' + await req.user );
+  res.send('/profile GET request: user | ' + await req.user);
 })
+
+app.get('/logout', function (req, res) {
+  // req.logOut();
+  res.status(200).clearCookie('connect.sid', {
+    path: '/'
+  });
+  req.session.destroy(function (err) {
+    res.redirect('/');
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

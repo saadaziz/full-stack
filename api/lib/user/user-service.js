@@ -1,4 +1,4 @@
-const { findById } = require("./user-model");
+const { isNull } = require("lodash");
 
 /**
  * fn | createUser - given the following parameters, create a new user, and, return userId from persistence layer.
@@ -10,7 +10,9 @@ const { findById } = require("./user-model");
  * output
  *  @return {String} userId
  **/
-const createUser = (User) => async (googleId, email, displayName, avatarUrl) => {
+const createUser = (User) => async (googleId, email, displayName, avatarUrl, googleToken) => {
+  console.log("createUser: " + googleId)
+  
   const createdAt = new Date();
   try {
     const existingUser = await User.findOne({ googleId: googleId });
@@ -18,11 +20,11 @@ const createUser = (User) => async (googleId, email, displayName, avatarUrl) => 
     if (existingUser)
       throw new Error(`User with googleid ${googleId} already exists`);
 
-    const newUser = new User({
-      googleId, email, createdAt, displayName, avatarUrl
-    });
+    const newUser = new User({googleId, email, createdAt, displayName, avatarUrl, googleToken});
 
     await newUser.save();
+
+
 
     return {
       userId: newUser._id
@@ -33,20 +35,31 @@ const createUser = (User) => async (googleId, email, displayName, avatarUrl) => 
   }
 }
 
-const signIn =  (User) => async (argument) => {
-  console.log("signIn " + argument);
-  const user = await User.findOne({ googleId: argument.googleId });
-  
-  console.log("user-service | signIn found user in db: " + user);
+const signIn = (User) => async (argument) => {
+  console.log("signIn " + JSON.stringify(argument));
+  try {
+    let user = await User.findOne({ googleId: argument.googleId });
 
-  return user;
+    console.log("user-service | signIn found user in db: " + user);
+    let googleId = argument.googleId, email = argument.email, displayName = argument.displayName, 
+    avatarUrl = argument.avatarUrl, googleToken = argument.googleToken, createdAt = Date.now();
 
+    // if user isn't found in the database, we will create them
+    if (isNull(user)) {
+      const newUser = new User({googleId, email, createdAt, displayName, avatarUrl, googleToken});
+      await newUser.save();
+    }
+    return user;
+
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 const findUsingId = (User) => async (argument) => {
   console.log("findUsingId " + argument)
-  const user = await User.findOne({ id: argument });
-  
+  const user = await User.findOne({ _id: argument });
+
   console.log("user-service | findUsingId found user in db: " + user);
 
   return user;
