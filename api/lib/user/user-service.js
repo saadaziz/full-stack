@@ -31,16 +31,18 @@ const createUser = (User) => async (googleId, email, displayName, avatarUrl) => 
   }
 }
 
-const listUsers = User => number => {
-}
+const signIn =  (User) => async (argument) => {
+  const user = await User.findOne({ googleId: argument.googleId });
+  
+  console.log("user-service | signIn found user in db: " + user);
 
-const updateUser = User => id => {
+  return user;
+
 }
 
 module.exports = (User) => {
   return {
     createUser: createUser(User),
-    listUser: listUsers(User),
-    updateUser: updateUser(User)
+    signIn: signIn(User)
   }
 }
