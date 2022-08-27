@@ -38,7 +38,7 @@ To be:
 
 Features
 - [x] Run tests in background | start with 'npm run-script test-watch'
-- [ ] Run user create tests against in-memory database as a mock for the real thing
+- [x] Run user create tests against in-memory database as a mock for the real thing
 - [ ] API server, running Node, express on a simple web server hosted by Elastic beanstalk, accessible at app.saadaziz.com
 - [ ] Error handling
 - [ ] Restful endpoints CRUD (User)
