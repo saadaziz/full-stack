@@ -9,7 +9,7 @@ router.use((req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-  res.send('Welcome to the index page');
+  res.send('Welcome');
 });
 
 router.get('/about', (req, res) => {
