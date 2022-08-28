@@ -13,28 +13,30 @@
 
 ### Context
 
-- While the source code will be publically available, my notes on putting things together will be available for purchase in book format
+- The source code will be publically available, my notes on putting things together is available as well, [reach out to me on LinkedIn and I can share it with you](http://linkedin.com/in/saadaziz). 
 - This resource is designed for new or seasoned developers to get an end to end walk through of a full stack enterprise application
 - The unique value proposition is that most resources are outdated, or only talk about simple outcomes. Whereas with this book, you will be able to build a full fledged modern full stack application.
 
 ## Architecture
 As is:
+[![name](https://lh3.googleusercontent.com/pw/AL9nZEVWuZsQKJ2rc7Xx7mjWtQpiG_DzG-KHH3toGBye8ABly4X0oj1yL6wQuz7LbRDAavoYROLxhjmKYS1irrrQLTohz4yS9YAQsKV_creofiFoNFk7WCMjK3-RJbVFHxNoaWRUf_6X-t1mOdmMut9TWaLL=w1842-h732-no?authuser=0)](http://github.com/saadaziz/full-stack)
 - node http server
 - express app, essentially routes and stacks of middleware
   - server side session data using express session middleware
   - client side cookie, correlating to session id access cookie parser middeware
 - jest unit tests for service layer
+- elastic beanstalk for infrastructure management
+- oAuth 2.0 using google API as identity server
+- user and session management with persistence on mongoDb cluster
 
 To be:
 - Browser
   - React, next, material-ui
-  - Server
-  - Next, mongoDb, mongoose, passport
+- Server
+  - Next
 - Infrastructure
-  - Elastic beanstalk
   - AWS documentDb
 - 3rd party integration
-  - Google OAuth API
   - Stripe API
   - Github API
   - Mailchimp API
@@ -50,7 +52,7 @@ Features
 - [ ] Error handling
 - [ ] Restful endpoints CRUD (User)
 - [ ] Mongodb and documentDb integration
-- [ ] Replace MemoryStore component in express-session
+- [x] Replace MemoryStore component in express-session
 - [ ] Winston logging 
 - [ ] Unit tests
 - [ ] CICD
@@ -82,6 +84,8 @@ Features
       - Session
       - Cookie
       - Local storage
+  - Backend
+    - mongoDb cluster
 
 #### Persistence | Browser Cookies and Server Session 
 - Using express-session
@@ -90,7 +94,7 @@ Features
   - Inspects headers between client/server communications, parses cookies, and writes them into the browser's state, saving the cookie locally for the user
 - Sessions are securely stored
   - A word on security
-    - Session data SHOULD not be stored in the cookie itself, the cookie should only contain a session identifier, unique to the application domain
+    - Session data should NOT be stored in the cookie itself, the cookie should only contain a session identifier, unique to the application domain
     - Session data will only be stored on the server, securely using mongoDb
 
 ## Gifts
