@@ -13,7 +13,6 @@
 
 ### Context
 
-- The source code will be publically available, my notes on putting things together is available as well, [reach out to me on LinkedIn and I can share it with you](http://linkedin.com/in/saadaziz). 
 - This resource is designed for new or seasoned developers to get an end to end walk through of a full stack enterprise application
 - The unique value proposition is that most resources are outdated, or only talk about simple outcomes. Whereas with this book, you will be able to build a full fledged modern full stack application.
 
@@ -56,6 +55,7 @@ Features
 - [ ] Winston logging 
 - [ ] Unit tests
 - [ ] CICD
+- [ ] SEO-optimize application
 
 ### Testability
 - In general terms, tests are expensive and we want to minimize superfluous testing
