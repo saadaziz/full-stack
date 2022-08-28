@@ -19,7 +19,7 @@
 
 ## Architecture
 As is:
-[![name](https://lh3.googleusercontent.com/pw/AL9nZEVWuZsQKJ2rc7Xx7mjWtQpiG_DzG-KHH3toGBye8ABly4X0oj1yL6wQuz7LbRDAavoYROLxhjmKYS1irrrQLTohz4yS9YAQsKV_creofiFoNFk7WCMjK3-RJbVFHxNoaWRUf_6X-t1mOdmMut9TWaLL=w1842-h732-no?authuser=0)](http://github.com/saadaziz/full-stack)
+[![name](https://photos.google.com/share/AF1QipNRAj7MweSACnDekGnDxOQMMv6txjGJjXWGUzr4rGtxZoR87OaoKplUKH-UDY4UJw/photo/AF1QipMhFhmfrvq3HYlvriDVY9CKyguPKzoiqATpi-Qv?key=N1UydlpZcmhPdVBwWXN1Q2N1bEVTcVdiT3lWcDlB)](http://github.com/saadaziz/full-stack)
 - node http server
 - express app, essentially routes and stacks of middleware
   - server side session data using express session middleware
