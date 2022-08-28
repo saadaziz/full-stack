@@ -125,6 +125,7 @@ passport.deserializeUser(async (id, done) => {
   try {
     let err;
     const user = await UserService.findUsingId(id);
+    console.log("deserializeUser() | " + user);
     done(null, user);
   } catch (err) {
     console.error("deserializeUser: err | " + err);
