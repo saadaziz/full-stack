@@ -152,6 +152,11 @@ app.get('/profile', async (req, res) => {
   // Cookies that have been signed
   console.log('Signed Cookies: ', req.signedCookies);
 
+  // inspect the request/session
+  console.log('request.session.cookie ' + JSON.stringify(req.session.cookie));
+  console.log('request.sessions.passport ' + JSON.stringify(req.session.passport));
+
+
   // Who is this user?
   res.send('/profile GET request: user | ' + await req.user);
 })
