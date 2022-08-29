@@ -1,5 +1,7 @@
 # front-end
-- As we evolve, engineering teams are looking for ways to preserve energy and to focus that raw power. A common source of frustration can be working together on large and complex systems. Naturally, we all know that to solve a large problem, is to break it down into smaller pieces.
+- As we evolve, engineering teams are looking for ways to preserve energy and to focus that raw power. 
+    - A common source of frustration can be working together on large and complex systems. 
+    - Naturally, we all know that to solve a large problem, is to break it down into smaller pieces.
 - How do we eat a giant avocado? 
     - We break it down into smaller and smaller chunks, until its the right size.
 - Similarly, we can extend this approach to our front end.
@@ -19,3 +21,21 @@ As is:
     - Granular releases, enabling multivariate testing
     - Components can incrementally evolve over time in the direction teams' see fit
 
+### test for completion
+- How will I know that the vision has come true?
+    - Two types of applications
+        - Parent
+            - Platform container, provides a run time container for children
+        - Child
+            - Modular "mini application", for example, user identity
+- How will we measure success?
+    - Run time injection
+        - The parent container makes HTTP requests at run time to fetch resources the child application needs, as needed
+    - Deployability
+        - The parent and child applications can be deployed independent of the rest of the stack
+    - Independence
+        - Each app, child or parent can be eployed without needing to change, after initial setup is complete
+    - Communication flow
+        - Additionally, the contents are served independently, then aggregated for a final response
+- What business outcome does this enable?
+    - We can easily perform A/B testing, easily switching between child components and measuring KPI
