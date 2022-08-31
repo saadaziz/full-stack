@@ -1,28 +1,27 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const defaultRoutes = require('./controller/default-routes');
-const userRoutes = require('./controller/user-routes');
-const authRoutes = require('./controller/auth-routes');
 const passport = require('passport');
 const Strategy = require('passport-google-oauth2');
-const UserService = require('./lib/user');
-var session = require('express-session');
+const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
+const db = require('./lib/data/mongoDb-connection');
+const UserService = require('./lib/user');
+const authRoutes = require('./controller/auth-routes');
+const userRoutes = require('./controller/user-routes');
+const defaultRoutes = require('./controller/default-routes');
 
-
-//TODO
+// TODO
 // consider moving all mongodb stuff out
 // consider moving all passport stuff out
 
 if (process.env.NODE_ENV !== 'production') {
-  console.log("Running !production");
+  console.log('Running !production');
   require('dotenv').config();
 }
 
 const PORT = process.env.PORT || 3001;
-const ROOT_URL = process.env.ROOT_URL;
+const { ROOT_URL } = process.env;
 const MONGO_URL = process.env.MONGO_DB_URL_TEST;
 const ONE_DAY_MILLISECONDS = 1000 * 60 * 60 * 24;
 
@@ -42,41 +41,27 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: process.env.NODE_ENV !== "production" ? false : true,
-    maxAge: ONE_DAY_MILLISECONDS
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: ONE_DAY_MILLISECONDS,
   },
   store: MongoStore.create({
     mongoUrl: MONGO_URL,
-  })
+  }),
 }));
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
+  app.set('trust proxy', 1); // trust first proxy
 }
 
 // set up data sources
+db.connect();
+
 // conecting to mongoDb atlas | TODO - factor in documentDb connection switching
-mongoose.connect(
-  MONGO_URL,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  },
-  (error) => {
-    if (error) console.log(error)
-  }
-)
-mongoose.connection.on('connected', function () {
-  console.log('Mongoose connected to MongoDb server');
-});
-mongoose.connection.on('error', function (err) {
-  console.log('Mongoose default connection error: ' + err);
-});
-mongoose.connection.on('disconnected', function () {
-  console.log('Mongoose default connection disconnected');
-});
 
 // set up access control list
 const verifyUser = async (accessToken, refreshToken, profile, verified) => {
+  let email;
+  let avatarUrl;
+
   if (profile.emails) {
     email = profile.emails[0].value;
   }
@@ -86,24 +71,20 @@ const verifyUser = async (accessToken, refreshToken, profile, verified) => {
   }
 
   try {
-
     const user = await UserService.signIn({
       googleId: profile.id,
       email: profile.email,
       googleToken: { accessToken, refreshToken },
       displayName: profile.displayName,
-      avatarUrl: avatarUrl
+      avatarUrl,
     });
 
     verified(null, user);
-
   } catch (err) {
-
+    console.log(`app | UserService.signIn err: ${err}`);
     verified(err);
-
-    console.log("app | UserService.signIn err: " + err);
   }
-}
+};
 
 // set up security
 passport.use(
@@ -125,12 +106,12 @@ passport.deserializeUser(async (id, done) => {
   try {
     let err;
     const user = await UserService.findUsingId(id);
-    console.log("deserializeUser() | " + user);
+    console.log(`deserializeUser() | ${user}`);
     done(null, user);
   } catch (err) {
-    console.error("deserializeUser: err | " + err);
+    console.error(`deserializeUser: err | ${err}`);
     done(err, user);
-  };
+  }
 });
 
 app.use(passport.initialize());
@@ -142,30 +123,15 @@ app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
 
 app.get('/api', (req, res) => {
-  res.send('/api GET request')
-})
+  res.send('/api GET request');
+});
 
-app.get('/profile', async (req, res) => {
-  // Cookies that have not been signed
-  console.log('Cookies: ', req.cookies)
-
-  // Cookies that have been signed
-  console.log('Signed Cookies: ', req.signedCookies);
-
-  // inspect the request/session
-  console.log('request.session.cookie ' + JSON.stringify(req.session.cookie));
-  console.log('request.sessions.passport ' + JSON.stringify(req.session.passport));
-
-
-  // Who is this user?
-  res.send('/profile GET request: user | ' + await req.user);
-})
-
-app.get('/logout', function (req, res) {
+app.get('/logout', (req, res) => {
   res.status(200).clearCookie('connect.sid', {
-    path: '/'
+    path: '/',
   });
-  req.session.destroy(function (err) {
+  req.session.destroy((err) => {
+    console.log(err);
     res.redirect('/');
   });
 });
