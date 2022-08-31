@@ -17,3 +17,6 @@ As is:
 ### creates bundle using webpack
 As is:
 ![As is](https://lh3.googleusercontent.com/pw/AL9nZEWoEdH8eSTiodGqcfuLwKeZURBRS8H08NPv-YBPs03gaHcghvQfKubK64dTfW1Vf47XnVEB3ZzP0xVpZY6eIDIotuEdCn1m7bnxff64McdwoPS8QUg7-z0yv_VbAWh4sLnymHeCIcnZ7J178K_S-Pfh=w1759-h969-no?authuser=0)
+
+### web pack five and module federation make for a powerful distributed system in the browser
+[Webpack 5 and Module Federation]("https://medium.com/swlh/webpack-5-module-federation-a-game-changer-to-javascript-architecture-bcdd30e02669")

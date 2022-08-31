@@ -11,6 +11,15 @@
 - Teams have ownership of the entire customer journey.
 - Each team can accelerate outcomes safely as the surface area is reduced by incremental deployments of fine grained layers of functionality.
 
+## architecture
+- Using module federation, we will turn the web browser into a distributed application, running a main "container" application
+    - Platform will be the "container", or host application
+    - Children applications, will attach to the hosting "container" at run time
+    - This will allow the parent and child to grow indepdently within isolation, exceptions can exist within well defined interfaces
+- Module federation uses the concept remote, and host
+  - A host is an application that is launched first
+  - The remote host communicates with the host application and webpack to resolve dependencies at run time
+
 ### high level architecture
 As is:
 ![As is](https://lh3.googleusercontent.com/pw/AL9nZEWKGz5Fbizsm4F6fYWu2xywvTefSSKpz_GLLgLrlcJxadJxreaVH5MvyxjGsxBR-LYTHxRiD0IENNVEHnnUZxb7Hd4He7SgQmLcu_lE2qgkaUHp84Zce1wzCgr-EgeHcIDSPBQ_Hs8pX25z_WOiYD3z=w1884-h788-no?authuser=0)
@@ -20,6 +29,9 @@ As is:
     - Deploying independent layers without impacting other components
     - Granular releases, enabling multivariate testing
     - Components can incrementally evolve over time in the direction teams' see fit
+- In simpler terms
+    - The client's browser will run an application, a "containing" application, platform
+    - The platform application, will be made up of sub-applications, for example, user
 
 ### test for completion
 - How will I know that the vision has come true?
